@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier une ville</title>
+    <style>
+        nav {
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        li {
+            margin-right: 20px;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 36px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        form div {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            font-size: 16px;
+            padding: 5px;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        button[type="submit"], button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover, button:hover {
+            background-color: #0056b3;
+        }
+
+        #mtp-submitted-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            margin: 0 auto;
+            margin-top: 50px;
+        }
+
+        #mtp-team-description {
+            display: none;
+        }
+
+        .mtp-team-description-field {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .mtp-team-description-field p {
+            font-size: 18px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="/villes">Villes</a></li>
+        <li><a href="/distance">Distance</a></li>
+    </ul>
+</nav>
+<h1>Modifier une ville</h1>
+<div id="mtp-team-description">
+    <form id="modifyVille" method="post"
+          th:action="'/ville/'+${ville.codeCommune}">
+        <div>
+            <label for="code-insee">Code INSEE :</label>
+            <input type="text" id="code-insee" name="code-insee"
+                   th:placeholder="${ville.codeCommune}" disabled>
+        </div>
+        <div>
+            <label for="nom-commune">Nom Commune :</label>
+            <input type="text" id="nom-commune" name="nom-commune"
+                   th:placeholder="${ville.nomCommune}">
+        </div>
+        <div>
+            <label for="code-postal">Code Postal :</label>
+            <input type="text" id="code-postal" name="code-postal"
+                   th:placeholder="${ville.codePostal}">
+        </div>
+        <div>
+            <label for="libelle">Libellé :</label>
+            <input type="text" id="libelle" name="libelle"
+                   th:placeholder="${ville.libelle}">
+        </div>
+        <div>
+            <label for="ligne">Ligne :</label>
+            <input type="text" id="ligne" name="ligne"
+                   th:placeholder="${ville.ligne}">
+        </div>
+        <button type="submit" onclick=handleSubmit()>Enregistrer</button>
+    </form>
+</div>
+
+<div id="mtp-submitted-form">
+    <div class="mtp-team-description-field">
+        <p>Code INSEE :</p>
+        <p th:text="${ville.codeCommune}">Code INSEE</p>
+    </div>
+    <div class="mtp-team-description-field">
+        <p>Nom Commune :</p>
+        <p th:text="${ville.nomCommune}">
+            Description</p>
+    </div>
+    <div class="mtp-team-description-field">
+        <p>Code Postal :</p>
+        <p th:text="${ville.codePostal}">Code Postal</p>
+    </div>
+    <div class="mtp-team-description-field">
+        <p>Libellé :</p>
+        <p th:text="${ville.libelle}">Libellé</p>
+    </div>
+    <div class="mtp-team-description-field">
+        <p>Ligne :</p>
+        <p th:text="${ville.ligne}">Ligne</p>
+    </div>
+    <div class="mtp-team-description-field">
+        <p>Latitude :</p>
+        <p th:text="${ville.latitude}">Latitude</p>
+    </div>
+    <div class="mtp-team-description-field">
+        <p>Longitude :</p>
+        <p th:text="${ville.longitude}">Longitude</p>
+    </div>
+    <button onclick=modify()>Modifier</button>
+</div>
+<script>
+    const handleSubmit = () => {
+
+        const form = document.querySelector('#mtp-team-description');
+        const message = document.querySelector('#mtp-submitted-form');
+        form.style.display = 'none';
+        message.style.display = 'block';
+    }
+
+    function modify() {
+        const form = document.querySelector('#mtp-team-description');
+        const message = document.querySelector('#mtp-submitted-form');
+        form.style.display = 'block';
+        message.style.display = 'none';
+    }</script>
+</body>
+</html>

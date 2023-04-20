@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des villes de France</title>
+    <style>
+        nav {
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        li {
+            margin-right: 20px;
+        }
+
+        .nav {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a class="nav" href="/villes">Villes</a></li>
+        <li><a class="nav" href="/distance">Distance</a></li>
+    </ul>
+</nav>
+
+<h1>Liste des villes de France</h1>
+
+<table id="villesTable">
+    <thead>
+    <tr>
+        <th>Code commune</th>
+        <th>Nom commune</th>
+        <th>Code postal</th>
+        <th>Libellé</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ville : ${villes}">
+        <td th:text="${ville.codeCommune}"></td>
+        <td><a th:href="@{/ville/{id}(id=${ville.codeCommune})}"
+               th:text="${ville.nomCommune}"></a></td>
+        <td th:text="${ville.codePostal}"></td>
+        <td th:text="${ville.libelle}"></td>
+        <td th:text="${ville.latitude}"></td>
+        <td th:text="${ville.longitude}"></td>
+    </tr>
+    </tbody>
+</table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#villesTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.11.3/i18n/fr_fr.json"
+            },
+            "buttons": [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export Excel',
+                    title: 'Liste des villes'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: 'Export PDF',
+                    title: 'Liste des villes'
+                }
+            ]
+        });
+    });
+</script>
+
+</body>
+</html>

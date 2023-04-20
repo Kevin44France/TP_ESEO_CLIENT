@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Calcul de distance</title>
+    <style>
+        nav {
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        li {
+            margin-right: 20px;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin: 20px auto;
+            width: 50%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        select {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px #ccc;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        button {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #666;
+
+        }</style>
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="/villes">Villes</a></li>
+        <li><a href="/distance">Distance</a></li>
+    </ul>
+</nav>
+<h1>Calcul de distance</h1>
+<form>
+    <label for="ville1">Ville 1:</label>
+    <select name="ville1" id="ville1">
+        <option value="">Sélectionnez une ville</option>
+        <option th:each="ville : ${villes}"
+                th:value="${ville.latitude} + ',' + ${ville.longitude}"
+                th:text="${ville.nomCommune}"></option>
+    </select>
+
+    <label for="ville2">Ville 2:</label>
+    <select name="ville2" id="ville2">
+        <option value="">Sélectionnez une ville</option>
+        <option th:each="ville : ${villes}"
+                th:value="${ville.latitude} + ',' + ${ville.longitude}"
+                th:text="${ville.nomCommune}"></option>
+    </select>
+
+    <button type="button" onclick=calculerDistance()>Calculer la distance
+    </button>
+
+</form>
+<script>
+    function calculerDistance() {
+        const ville1 = document.getElementById("ville1").value.split(",");
+        const ville2 = document.getElementById("ville2").value.split(",");
+
+        const lat1 = parseFloat(ville1[0]);
+        const lon1 = parseFloat(ville1[1]);
+        const lat2 = parseFloat(ville2[0]);
+        const lon2 = parseFloat(ville2[1]);
+
+        function distance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const d = R * c;
+            return d;
+        }
+
+        const d = distance(lat1, lon1, lat2, lon2);
+        alert("La distance entre les deux villes est de " + d.toFixed(2) + " kilomètres.");
+    }
+</script>
+</body>
+</html>
+
